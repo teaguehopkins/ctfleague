@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %body
+    %h1 A draft pick has been made in #{@league.name}!
+    %p
+      #{@member.username}! It is your turn to draft in #{@league.name}.
+    %p
+      To view the draft, just follow
+      = link_to "this link.", league_draft_url(@league, @draft)

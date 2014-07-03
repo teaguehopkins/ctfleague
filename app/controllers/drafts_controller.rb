@@ -34,6 +34,8 @@ class DraftsController < ApplicationController
 
     @draft.increment_current_position
     @team = current_user.teams.find_by_league_id(params[:league_id])
+    
+    @draft.send_next_turn_email
 
     @team.tokens << @token
     @draft.tokens.delete(@token)

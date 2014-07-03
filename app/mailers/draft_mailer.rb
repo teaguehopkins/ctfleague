@@ -9,4 +9,12 @@ class DraftMailer < ActionMailer::Base
 
     mail(to: @member.email, subject: 'The draft has begun!', host: 'example.com')
   end
+
+  def draft_turn_email(league, snake_position, draft)
+    @snake_position = snake_position
+    @member = snake_position.user
+    @league = league
+    @draft = draft
+    mail(to: @member.email, subject: 'It is your turn in the draft!', host: 'example.com')
+  end
 end

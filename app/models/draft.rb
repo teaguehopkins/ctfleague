@@ -62,6 +62,11 @@ class Draft < ActiveRecord::Base
       end
     end
 
+    def send_next_turn_email
+      @league = League.find(self.league_id)
+      @current_position = self.snake_positions.find_by position: self.current_position
+      DraftMailer.draft_turn_email(@league, @current_position, self).deliver
+    end
     self.save
   end
 end
