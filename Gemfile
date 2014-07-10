@@ -22,6 +22,8 @@ gem 'rails_12factor', group: :production
 
 gem 'spring',        group: :development
 
+gem 'simplecov', :require => false, :group => :test
+
 group :development, :test do
   gem 'rspec-rails', '<2.99'
   gem 'rspec', '<3.0'
@@ -46,4 +48,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
