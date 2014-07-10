@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %body
+    %h1 Match results for #{@league.name}!
+    %p
+      Greetings, #{@user.username}! Here are the match results for your match against #{@opponent.username} in #{@league.name}.
+    %p
+      The winner was #{@winner.username}.
+    %p
+      Remember to update your lineups and select "Ready" for the next match.
+    %p
+      To view the league, just follow
+      = link_to "this link.", league_url(@league)

@@ -74,14 +74,6 @@ class MatchesController < ApplicationController
       soldier.damage = soldier.damage + 1
       soldier.save
     end
-=begin
-#Simple coin flip determines winner
-    if Random.rand(1..2) == 1
-      winning_member = @match.match_members.first
-    else
-      winning_member = @match.match_members.last
-    end
-=end
     winning_member = roto_winner
     winning_member.winner = true
     winning_member.save
