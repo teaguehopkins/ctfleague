@@ -37,6 +37,7 @@ class MatchesController < ApplicationController
 
   def finish
     @match.finish
+    @match.send_match_results_emails
 
     @team_1.heal_bench_tokens
     @team_2.heal_bench_tokens

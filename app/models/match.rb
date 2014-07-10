@@ -15,6 +15,15 @@ class Match < ActiveRecord::Base
     self.save
   end
 
+  def send_match_results_emails
+    @league = League.find(self.league_id)
+    @match_members = self.match_members
+
+    @match_members.each do |mm|
+      MatchMailer.send_match_results_emails(@league, mm, @match_members, self).deliver
+    end
+  end
+
   private
 
   def award_points
