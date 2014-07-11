@@ -1,25 +1,27 @@
 class MatchMailer < ActionMailer::Base
   default from: "no-reply@heavymetalalpha.herokuapp.com"
 
-  def send_match_results_emails(league, member, match_members, match)
+  #does this accessor need to be here?
+  attr_accessor :match_members, :user
+
+  def send_match_results_emails(league, user, match_members, match)
     @match_members = match_members
-    @member = member
-    @user = member.user
+    @user = user
     @league = league
     @match = match
-    if match_members.first == member
-        @opponent = match_members.last.user
+    if @match_members.first == user
+        @opponent = @match_members.last
     else #match_members.last == user
-        @opponent = match_members.first.user
+        @opponent = @match_members.first
     end
 
-    if @member.winner == true
+    if @user.winner
         @winner = @user
     else
         @winner = @opponent
     end
 
-    mail(to: @user.email, subject: 'Match Results!', host: 'example.com')
+    mail(to: @member.email, subject: 'Match Results!', host: 'example.com')
   end
 
 end

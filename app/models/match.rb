@@ -5,6 +5,8 @@ class Match < ActiveRecord::Base
   has_many :match_tokens
   has_many :tokens, through: :match_tokens
 
+  attr_reader :match_members
+
   scope :finished, -> { where(finished: true) }
   scope :active, -> { where(finished: [false, nil]) }
 
