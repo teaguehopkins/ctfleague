@@ -1,3 +1,3 @@
 Fabricator(:match_member) do
-  user
+  user {Fabricate(:user)}
   end
