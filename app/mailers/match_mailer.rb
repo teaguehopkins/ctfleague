@@ -15,11 +15,7 @@ class MatchMailer < ActionMailer::Base
         @opponent = @match_members.first
     end
 
-    if @user.winner
-        @winner = @user
-    else
-        @winner = @opponent
-    end
+    @winner = @match_members.find(&:winner?)
 
     mail(to: @member.email, subject: 'Match Results!', host: 'example.com')
   end

@@ -71,7 +71,7 @@ class MatchesController < ApplicationController
   def simulate_match
     @match.tokens.each do |token|
       soldier = token.units.first.soldiers.first
-      soldier.damage = soldier.damage + 1
+      soldier.damage = soldier.damage + rand(0..2)
       soldier.save
     end
     winning_member = roto_winner
