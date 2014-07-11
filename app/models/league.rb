@@ -1,6 +1,7 @@
 class League < ActiveRecord::Base
   belongs_to :commissioner, :class_name => :User, :foreign_key => 'user_id'
   has_many :teams, dependent: :destroy
+  has_many :seasons
   has_many :drafts
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
@@ -13,8 +14,6 @@ class League < ActiveRecord::Base
   scope :active, -> { where(active: true) }
 
   after_create :generate_league_key
-
-  attr_accessor :season
 
   def generate_round_robin
     @members = self.users.shuffle
