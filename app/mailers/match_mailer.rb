@@ -6,15 +6,16 @@ class MatchMailer < ActionMailer::Base
     #equivalent to @league = League.find(self.league_id)
     @league = match.league
     @match = match
-    @winner = @match_members.find(&:winner?)
+    @winner = @match_members.find(&:winner?).user
     @match_members.each do |mm|
-      @user = mm
-        if @match_members.first == user
-            @opponent = @match_members.last
+      @member = mm
+      @user = @member.user
+        if @match_members.first == @member
+            @opponent = @match_members.last.user
         else #match_members.last == user
-            @opponent = @match_members.first
+            @opponent = @match_members.first.user
         end
-      mail(to: @member.email, subject: 'Match Results!', host: 'example.com')
+      mail(to: @user.email, subject: 'Match Results!', host: 'example.com').deliver
     end
   end
 end

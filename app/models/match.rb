@@ -5,8 +5,6 @@ class Match < ActiveRecord::Base
   has_many :match_tokens
   has_many :tokens, through: :match_tokens
 
-  attr_reader :match_members
-
   scope :finished, -> { where(finished: true) }
   scope :active, -> { where(finished: [false, nil]) }
 
@@ -18,7 +16,7 @@ class Match < ActiveRecord::Base
   end
 
   def send_match_results_emails
-    MatchMailer.send_match_results_emails(self).deliver
+    MatchMailer.send_match_results_emails(self)
   end
 
   private
