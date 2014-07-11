@@ -18,12 +18,7 @@ class Match < ActiveRecord::Base
   end
 
   def send_match_results_emails
-    @league = League.find(self.league_id)
-    @match_members = self.match_members
-
-    @match_members.each do |mm|
-      MatchMailer.send_match_results_emails(@league, mm, @match_members, self).deliver
-    end
+    MatchMailer.send_match_results_emails(self).deliver
   end
 
   private
