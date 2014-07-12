@@ -12,11 +12,8 @@ class Match < ActiveRecord::Base
     self.finished = true
     award_points
     increase_unit_stats
-    self.save
-  end
-
-  def send_match_results_emails
     MatchMailer.send_match_results_emails(self)
+    self.save
   end
 
   private
