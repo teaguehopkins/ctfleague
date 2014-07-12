@@ -5,6 +5,10 @@ describe "Match results email" do
   include EmailSpec::Helpers
   include EmailSpec::Matchers
 
+  before do
+    MatchMailer.default_url_options = { :host => 'localhost' }
+  end
+
   # These are another way of achieving the below
   # The below is more rspecy
   #
@@ -18,7 +22,6 @@ describe "Match results email" do
   #   m
   # }
 
-
   let(:match) { Fabricate(:match) }
   let(:mail) { MatchMailer.send_match_results_emails(match) }
 
@@ -28,22 +31,26 @@ describe "Match results email" do
     mail.should deliver_from("no-reply@heavymetalalpha.herokuapp.com")
   end
 
-  # I made it pending becuase I didn't create a user yet
-  xit "should be sent to the user's email address" do
-    mail.should deliver_to(@user.email)
+  it "should be sent to the user's email address" do
+    mail.should deliver_to(match.match_members.first.user.email&&match.match_members.last.user.email)
   end
 
   it "should have a subject line" do
-    mail.should have_subject
+    mail.should have_subject("Match Results!")
   end
 
-  pending "should tell who the match was against" do
-    @mail.should have_body_text("#{@user.username}")
-    @mail.should have_body_text("#{@user.username}")
+  it "should tell who the match was between" do
+    mail.should have_body_text("#{match.match_members.first.user.username}")
+    mail.should have_body_text("#{match.match_members.last.user.username}")
   end
 
-  pending "should have a link to the site in it" do
-    mail.should have_body_text("To log in to the site, just follow this link: " + @url)
+  it "should correctly identify the winner" do
+    mail.should have_body_text("The winner was #{match.match_members.last.user.username}")
+  end
+
+  #need to rewrite this test to work with any host
+  xit "should have a link to the site in it" do
+    mail.should have_body_text("To log in to the site, just follow this link: " + hostname)
   end
 
   it "shouldn't have this text in it" do
