@@ -34,9 +34,6 @@ class DraftsController < ApplicationController
 
     @draft.increment_current_position
     @team = current_user.teams.find_by_league_id(params[:league_id])
-    
-    @draft.send_next_turn_email
-
     @team.tokens << @token
     @draft.tokens.delete(@token)
 
@@ -46,6 +43,7 @@ class DraftsController < ApplicationController
       @league.generate_round_robin
       redirect_to league_path(@league.id)
     else
+      @draft.send_next_turn_email
       redirect_to league_draft_path(params[:league_id], params[:id])
     end
   end

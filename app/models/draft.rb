@@ -39,12 +39,11 @@ class Draft < ActiveRecord::Base
   end
 
   def send_draft_beginning_emails
-    @league = League.find(self.league_id)
-    @snake_positions = self.snake_positions
+    DraftMailer.draft_beginning_email(self)
+  end
 
-    @snake_positions.each do |sp|
-      DraftMailer.draft_beginning_email(@league, sp, self).deliver
-    end
+  def send_next_turn_email
+    DraftMailer.draft_turn_email(self)
   end
 
   def increment_current_position
@@ -60,12 +59,6 @@ class Draft < ActiveRecord::Base
       else
         self.current_position = self.current_position + 1
       end
-    end
-
-    def send_next_turn_email
-      @league = League.find(self.league_id)
-      @current_position = self.snake_positions.find_by position: self.current_position
-      DraftMailer.draft_turn_email(@league, @current_position, self).deliver
     end
     self.save
   end
