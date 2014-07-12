@@ -1,3 +1,4 @@
 Fabricator(:match) do
-  match_members!(count: 2) {Fabricate(:match_members)}
+  # match_members { 2.times.map { Fabricate(:match_member) } }
+  match_members { [ Fabricate(:match_member),  Fabricate(:match_member, winner: true) ] }
 end
