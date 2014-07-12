@@ -20,3 +20,6 @@
 
 # Ignore coverage reports
 /coverage
+
+# Ignore gems
+vendor/bundle
