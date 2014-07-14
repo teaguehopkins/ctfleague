@@ -36,7 +36,12 @@ class Soldier < ActiveRecord::Base
   end
 
   def check_for_retirement
-    if self.age == 30
+    @factor = 0.6
+    @agefactor = 0.9
+    @rankfactor = 0.8
+    #Percent chance of retiring = 1 - (factor ^ (age * agefactor - rank * rankfactor - 18)).
+    @chance = 1 - (@factor**(self.age*@agefactor - self.rank * @rankfactor - 18))
+    if @chance > rand
       self.retired = true
       self.save
 
