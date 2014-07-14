@@ -1,0 +1,3 @@
+Fabricator(:soldier) do
+
+end
