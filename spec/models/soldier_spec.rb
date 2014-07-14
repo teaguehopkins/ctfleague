@@ -9,6 +9,12 @@ describe "Soldier" do
     soldier.last_name.should_not be(nil)
   end
 
+  it "should report correct hardiness" do
+    soldier.set_starting_attributes
+    soldier.damage = 2
+    soldier.effective_hardiness.should be(soldier.hardiness-2000)
+  end
+
   it "should always retire at 33 at rank 1" do
     soldier.set_starting_attributes
     soldier.age = 33

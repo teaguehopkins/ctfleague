@@ -23,7 +23,8 @@ class Soldier < ActiveRecord::Base
 
 
   def effective_hardiness
-    truehard = self.hardiness - self.damage * 10
+    #binding.pry
+    truehard = self.hardiness - self.damage * 1000
     if truehard < 1
       truehard = 1
     end
