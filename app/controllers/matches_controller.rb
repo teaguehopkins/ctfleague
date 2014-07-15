@@ -109,16 +109,18 @@ class MatchesController < ApplicationController
     @team_1_roto_points = 0
     @team_2_roto_points = 0
     head_to_head(team_1_aim, team_2_aim)
+    @match.log("Aim: Team 1 #{team_1_aim/100}, Team 2 #{team_2_aim/100}")
     head_to_head(team_1_stealth, team_2_stealth)
+    @match.log("Stealth: Team 1 #{team_1_stealth/100}, Team 2 #{team_2_stealth/100}")
     head_to_head(team_1_speed, team_2_speed)
+    @match.log("Speed: Team 1 #{team_1_speed/100}, Team 2 #{team_2_speed/100}")
     head_to_head(team_1_sight, team_2_sight)
+    @match.log("Sight: Team 1 #{team_1_sight/100}, Team 2 #{team_2_sight/100}")
     head_to_head(team_1_hardiness, team_2_hardiness)
+    @match.log("Hardiness: Team 1 #{team_1_hardiness/100}, Team 2 #{team_2_hardiness/100}")
 
-    puts "-------------------------------------------------------------------------"
-    puts "Team 1 roto points: #{@team_1_roto_points}"
-    puts "Team 2 roto points: #{@team_2_roto_points}"
-    puts "-------------------------------------------------------------------------"
-
+    @match.log("Team 1 roto points: #{@team_1_roto_points}")
+    @match.log("Team 2 roto points: #{@team_2_roto_points}")
     if @team_1_roto_points > @team_2_roto_points
       winner = @match.match_members.first
     else
@@ -136,8 +138,10 @@ class MatchesController < ApplicationController
       #coin flip for tie breaker. This should be rare, since stats are out to 2 decimals.
       if Random.rand(1..2) == 1
         @team_1_roto_points += 1
+        @match.log("Team 1 wins tie-breaker")
       else
         @team_2_roto_points +=1
+        @match.log("Team 2 wins tie-breaker")
       end
     end
 end

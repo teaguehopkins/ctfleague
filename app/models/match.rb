@@ -8,6 +8,19 @@ class Match < ActiveRecord::Base
   scope :finished, -> { where(finished: true) }
   scope :active, -> { where(finished: [false, nil]) }
 
+  serialize :match_log
+
+  def log(event)
+    if self.match_log == nil
+      self.match_log = []
+    end
+    self.match_log << event
+  end
+
+  def get_log
+    self.match_log
+  end
+
   def finish
     self.finished = true
     award_points
@@ -51,41 +64,6 @@ class Match < ActiveRecord::Base
     develop_soldiers(side_1)
     develop_soldiers(side_2)
   end
-=begin refactored
-    leadership_1 = side_1.last.leadership
-    leadership_2 = side_2.last.leadership
-
-    side_1.each do |soldier|
-      bonus = 200 * ((leadership_1 + 5000)/10000.00)
-      soldier.aim = soldier.aim + bonus
-      soldier.speed = soldier.speed + bonus
-      soldier.stealth = soldier.stealth + bonus
-      soldier.sight = soldier.sight + bonus
-      soldier.hardiness = soldier.hardiness + bonus
-      soldier.leadership = soldier.leadership + bonus
-      #XP +1 at the end of a match (future: where they weren't incapacitated)
-      soldier.xp = soldier.xp + 1
-      #rank +1 at certain XP thresholds
-      #soldier.rank =
-      soldier.save
-    end
-
-    side_2.each do |soldier|
-      bonus = 200 * ((leadership_2 + 5000)/10000.00)
-      soldier.aim = soldier.aim + bonus
-      soldier.speed = soldier.speed + bonus
-      soldier.stealth = soldier.stealth + bonus
-      soldier.sight = soldier.sight + bonus
-      soldier.hardiness = soldier.hardiness + bonus
-      soldier.leadership = soldier.leadership + bonus
-      #XP +1 at the end of a match (future: where they weren't incapacitated)
-      soldier.xp = soldier.xp + 1
-      #rank +1 at certain XP thresholds
-      soldier.save
-    end
-  end
-=end
-
 
   def develop_soldiers(side)
     side.each do |soldier|
