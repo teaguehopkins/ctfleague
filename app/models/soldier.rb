@@ -21,9 +21,12 @@ class Soldier < ActiveRecord::Base
     self.save
   end
 
+  def average
+    #returns actual average, not average * 100
+    (self.aim + self.sight + self.stealth + self.speed + self.hardiness + self.leadership)/600
+  end
 
   def effective_hardiness
-    #binding.pry
     truehard = self.hardiness - self.damage * 1000
     if truehard < 1
       truehard = 1

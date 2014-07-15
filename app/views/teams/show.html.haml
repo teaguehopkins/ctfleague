@@ -29,7 +29,7 @@
         %td= soldier.speed/100
         %td= (soldier.effective_hardiness/100).to_s() +" / "+ (soldier.hardiness/100).to_s()
         %td= soldier.leadership/100
-        %td= (soldier.aim + soldier.sight + soldier.stealth + soldier.speed + soldier.hardiness + soldier.leadership)/600
+        %td= soldier.average
         %td= soldier.damage
         %td
           = simple_form_for([@league, @team, token]) do |f|
@@ -65,7 +65,7 @@
           %td= soldier.speed/100
           %td= (soldier.effective_hardiness/100).to_s() +" / "+ (soldier.hardiness/100).to_s()
           %td= soldier.leadership/100
-          %td= (soldier.aim + soldier.sight + soldier.stealth + soldier.speed + soldier.hardiness + soldier.leadership)/600
+          %td= soldier.average
           %td= soldier.damage
           %td
             = simple_form_for([@league, @team, token]) do |f|
@@ -97,7 +97,7 @@
           %td= soldier.speed/100
           %td= soldier.hardiness/100
           %td= soldier.leadership/100
-          %td= (soldier.aim + soldier.sight + soldier.stealth + soldier.speed + soldier.hardiness + soldier.leadership)/600
+          %td= soldier.average
 
 .small_text_box
   %p

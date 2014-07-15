@@ -15,6 +15,11 @@ describe "Soldier" do
     soldier.effective_hardiness.should be(soldier.hardiness-2000)
   end
 
+  it "should report correct average" do
+    soldier.set_starting_attributes
+    soldier.average.should be((soldier.aim + soldier.sight + soldier.stealth + soldier.speed + soldier.hardiness + soldier.leadership)/600)
+  end
+
   it "should always retire at 33 at rank 1" do
     soldier.set_starting_attributes
     soldier.age = 33
