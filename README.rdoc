@@ -29,12 +29,11 @@ Mailgun API must be configured for production environment. Dev/test use letter_o
 
 === How to run the test suite
 
-?
+rspec
 
 ===  Deployment instructions
 
-?
-
+Make sure you use Figaro to set your mailgun API.
 
 * ...
 
