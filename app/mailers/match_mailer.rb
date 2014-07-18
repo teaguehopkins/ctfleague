@@ -6,6 +6,7 @@ class MatchMailer < ActionMailer::Base
     #equivalent to @league = League.find(self.league_id)
     @league = match.league
     @match = match
+    @log = match.get_log
     @winner = @match_members.find(&:winner?).user
     @match_members.each do |mm|
       @member = mm

@@ -56,4 +56,10 @@ describe "Match results email" do
   it "shouldn't have this text in it" do
     mail.should_not have_body_text("I'm a little teapot, short and stout")
   end
+
+  it "should have log of match events" do
+    match.log("Event 1")
+    match.log("Event 2")
+    mail.should have_body_text("Event 1"&&"Event 2")
+  end
 end

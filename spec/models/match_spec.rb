@@ -26,4 +26,9 @@ describe "Match" do
     soldier.rank.should be(12)
   end
 
+  it "should have a working match log" do
+    match.log("First Event")
+    match.log("Second Event")
+    match.get_log.should eq(["First Event","Second Event"])
+  end
 end

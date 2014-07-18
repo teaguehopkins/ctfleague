@@ -44,3 +44,11 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+#enables multi-browser testing
+def in_browser(name)
+  old_session = Capybara.session_name
+  Capybara.session_name = name
+  yield
+  Capybara.session_name = old_session
+end
