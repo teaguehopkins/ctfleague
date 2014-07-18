@@ -35,6 +35,7 @@ class DraftsController < ApplicationController
     if @token.team == nil
       @draft.increment_current_position
       @team = current_user.teams.find_by_league_id(params[:league_id])
+      @token.units.first.soldiers.first.update_attribute(:updated_at, Time.now)
       @team.tokens << @token
       @draft.tokens.delete(@token)
 
