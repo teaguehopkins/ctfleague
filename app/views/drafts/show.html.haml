@@ -36,3 +36,36 @@
         %td= soldier.average
         - if @current_position.user == current_user
           %td= button_to "Draft", choose_league_draft_path(@league, @draft, :token_id => token.id), :class => 'table_button'
+
+%h2.draft_h2 Recent Picks
+%table
+  %thead
+    %th User
+    %th Last Name
+    %th First Name
+    %th Aim
+    %th Sight
+    %th Stealth
+    %th Speed
+    %th Hardiness
+    %th Leadership
+    %th Average
+    %th Timestamp
+  %tbody
+    - @draft.snake_positions.each do |sp|
+      - other_user = sp.user
+      - other_user_team = sp.user.teams.find_by league: @league
+      - if other_user_team.tokens != []
+        - soldier = other_user_team.tokens.last.units.last.soldiers.last
+        %tr
+          %td= other_user.username
+          %td= soldier.last_name
+          %td= soldier.first_name
+          %td= soldier.aim/100
+          %td= soldier.sight/100
+          %td= soldier.stealth/100
+          %td= soldier.speed/100
+          %td= soldier.hardiness/100
+          %td= soldier.leadership/100
+          %td= soldier.average
+          %td= soldier.updated_at

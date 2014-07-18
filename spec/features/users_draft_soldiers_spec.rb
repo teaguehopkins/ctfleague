@@ -102,7 +102,6 @@ end
     end
     in_browser(:one) do
       visit current_path
-      binding.pry
       @user1.leagues.first.matches.first.get_log.should_not be(nil)
     end
   end
