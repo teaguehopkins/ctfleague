@@ -52,20 +52,16 @@
     %th Average
     %th Timestamp
   %tbody
-    - @draft.snake_positions.each do |sp|
-      - other_user = sp.user
-      - other_user_team = sp.user.teams.find_by league: @league
-      - if other_user_team.tokens != []
-        - soldier = other_user_team.tokens.last.units.last.soldiers.last
-        %tr
-          %td= other_user.username
-          %td= soldier.last_name
-          %td= soldier.first_name
-          %td= soldier.aim/100
-          %td= soldier.sight/100
-          %td= soldier.stealth/100
-          %td= soldier.speed/100
-          %td= soldier.hardiness/100
-          %td= soldier.leadership/100
-          %td= soldier.average
-          %td= soldier.updated_at
+    - @draft.get_recent_picks.each do |soldier|
+      %tr
+        %td= soldier.unit.token.team.user.username
+        %td= soldier.last_name
+        %td= soldier.first_name
+        %td= soldier.aim/100
+        %td= soldier.sight/100
+        %td= soldier.stealth/100
+        %td= soldier.speed/100
+        %td= soldier.hardiness/100
+        %td= soldier.leadership/100
+        %td= soldier.average
+        %td= soldier.updated_at

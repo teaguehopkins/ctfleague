@@ -62,4 +62,16 @@ class Draft < ActiveRecord::Base
     end
     self.save
   end
+
+  def get_recent_picks
+    @recent_picks = Array.new
+    if self.league.get_all_soldiers != []
+      self.league.get_all_soldiers.sort_by {|updated_at| updated_at}.each do |soldier|
+        @recent_picks << soldier
+      end
+    end
+    @number_to_return = self.league.teams.length*2
+    @recent_picks.reverse.slice(0..@number_to_return)
+  end
+
 end
