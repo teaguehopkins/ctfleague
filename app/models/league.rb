@@ -86,6 +86,7 @@ class League < ActiveRecord::Base
   end
 
   def age_soldiers
+    #refactor this with get_all_soldiers?
     self.teams.each do |team|
       team.tokens.each do |token|
         soldier = token.units.first.soldiers.first
@@ -94,6 +95,18 @@ class League < ActiveRecord::Base
       end
     end
   end
+
+  def get_all_soldiers
+    #returns array with all soldiers on teams in this league, or [] if no soldiers drafted yet
+    @all_soldiers = []
+    self.teams.each do |team|
+      team.tokens.each do |token|
+        @all_soldiers << token.units.first.soldiers.first
+      end
+    end
+    @all_soldiers
+  end
+
 
   def end_tournament
     self.season = self.season + 1
