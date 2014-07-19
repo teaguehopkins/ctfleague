@@ -75,52 +75,39 @@ class MatchesController < ApplicationController
 
   def roto_winner
     #initialize variables
-    team_1_aim = 0
-    team_1_stealth = 0
-    team_1_speed = 0
-    team_1_sight = 0
-    team_1_hardiness = 0
-    team_2_aim = 0
-    team_2_stealth = 0
-    team_2_speed = 0
-    team_2_sight = 0
-    team_2_hardiness = 0
+    team_1_aim = @team_1.total_stat('aim')
+    team_1_stealth = @team_1.total_stat('stealth')
+    team_1_speed = @team_1.total_stat('speed')
+    team_1_sight = @team_1.total_stat('sight')
+    team_1_hardiness = @team_1.total_stat('effective_hardiness')
 
-    #sums the stats for each team, this can probably be refactored with Reduce
-    @team_1.tokens.on_squad.each do |token|
-      soldier = token.units.first.soldiers.first
-      team_1_aim = team_1_aim + soldier.aim
-      team_1_stealth = team_1_stealth + soldier.stealth
-      team_1_speed = team_1_speed + soldier.speed
-      team_1_sight = team_1_sight + soldier.sight
-      team_1_hardiness = team_1_hardiness + soldier.effective_hardiness
-    end
-
-    @team_2.tokens.on_squad.each do |token|
-      soldier = token.units.first.soldiers.first
-      team_2_aim = team_2_aim + soldier.aim
-      team_2_stealth = team_2_stealth + soldier.stealth
-      team_2_speed = team_2_speed + soldier.speed
-      team_2_sight = team_2_sight + soldier.sight
-      team_2_hardiness = team_2_hardiness + soldier.effective_hardiness
-    end
+    team_2_aim = @team_2.total_stat('aim')
+    team_2_stealth = @team_2.total_stat('stealth')
+    team_2_speed = @team_2.total_stat('speed')
+    team_2_sight = @team_2.total_stat('sight')
+    team_2_hardiness = @team_2.total_stat('effective_hardiness')
 
     #compares each category
     @team_1_roto_points = 0
     @team_2_roto_points = 0
     head_to_head(team_1_aim, team_2_aim)
-    @match.log("Aim: Team 1 #{team_1_aim/100}, Team 2 #{team_2_aim/100}")
+    @match.log("#{@team_1.name} Aim: #{team_1_aim/100}")
+    @match.log("#{@team_2.name} Aim: #{team_2_aim/100}")
     head_to_head(team_1_stealth, team_2_stealth)
-    @match.log("Stealth: Team 1 #{team_1_stealth/100}, Team 2 #{team_2_stealth/100}")
+    @match.log("#{@team_1.name} Stealth: #{team_1_stealth/100}")
+    @match.log("#{@team_2.name} Stealth: #{team_2_stealth/100}")
     head_to_head(team_1_speed, team_2_speed)
-    @match.log("Speed: Team 1 #{team_1_speed/100}, Team 2 #{team_2_speed/100}")
+    @match.log("#{@team_1.name} Speed: #{team_1_speed/100}")
+    @match.log("#{@team_2.name} Speed: #{team_2_speed/100}")
     head_to_head(team_1_sight, team_2_sight)
-    @match.log("Sight: Team 1 #{team_1_sight/100}, Team 2 #{team_2_sight/100}")
+    @match.log("#{@team_1.name} Sight: #{team_1_sight/100}")
+    @match.log("#{@team_2.name} Sight: #{team_2_sight/100}")
     head_to_head(team_1_hardiness, team_2_hardiness)
-    @match.log("Hardiness: Team 1 #{team_1_hardiness/100}, Team 2 #{team_2_hardiness/100}")
+    @match.log("#{@team_1.name} Hardiness: #{team_1_hardiness/100}")
+    @match.log("#{@team_2.name} Hardiness: #{team_2_hardiness/100}")
 
-    @match.log("Team 1 roto points: #{@team_1_roto_points}")
-    @match.log("Team 2 roto points: #{@team_2_roto_points}")
+    @match.log("#{@team_1.name} wins #{@team_1_roto_points} Categories")
+    @match.log("#{@team_2.name} wins #{@team_2_roto_points} Categories")
     if @team_1_roto_points > @team_2_roto_points
       winner = @match.match_members.first
     else

@@ -16,6 +16,7 @@ class MatchMailer < ActionMailer::Base
         else #match_members.last == user
             @opponent = @match_members.first.user
         end
+      @opponent_team = @opponent.teams.select{|team| team.league == @league}.first
       mail(to: @user.email, subject: 'Match Results!', host: 'example.com').deliver
     end
   end
