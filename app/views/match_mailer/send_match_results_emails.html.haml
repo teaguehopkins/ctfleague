@@ -5,12 +5,14 @@
   %body
     %h1 Match results for #{@league.name}!
     %p
-      Greetings, #{@user.username}! Here are the match results for your match against #{@opponent.username} in #{@league.name}.
+      Greetings, #{@user.username}! Here are the match results for your match against #{@opponent.username}'s team #{@opponent_team.name} in #{@league.name}.
     %p
       The winner was #{@winner.username}.
     %h2 Detailed Results
-    %p #{@log}
-
+    -#%p #{@log}
+    - @log.each do |event|
+      %p= event
+    %h2 Next Match
     %p
       Remember to update your lineups and select "Ready" for the next match.
     %p
