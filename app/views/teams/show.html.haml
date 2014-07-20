@@ -4,6 +4,7 @@
 %h2 Current Squad
 %table
   %thead
+    %th Rank
     %th Last Name
     %th First Name
     %th Age
@@ -20,6 +21,7 @@
     - @team.tokens.on_squad.each do |token|
       - soldier = token.units.first.soldiers.first
       %tr
+        %td= soldier.get_rank
         %td= soldier.last_name
         %td= soldier.first_name
         %td= soldier.age
@@ -39,6 +41,7 @@
 %h2 Bench
 %table
   %thead
+    %th Rank
     %th Last Name
     %th First Name
     %th Age
@@ -56,6 +59,7 @@
       - soldier = token.units.first.soldiers.first
       - if !soldier.retired
         %tr
+          %td= soldier.get_rank
           %td= soldier.last_name
           %td= soldier.first_name
           %td= soldier.age
@@ -75,6 +79,7 @@
 %h2 Retired
 %table
   %thead
+    %th Rank
     %th Last Name
     %th First Name
     %th Aim
@@ -89,6 +94,7 @@
       - soldier = token.units.first.soldiers.first
       - if soldier.retired
         %tr
+          %td= soldier.get_rank
           %td= soldier.last_name
           %td= soldier.first_name
           %td= soldier.aim/100
