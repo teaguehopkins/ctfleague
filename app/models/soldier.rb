@@ -21,6 +21,22 @@ class Soldier < ActiveRecord::Base
     self.save
   end
 
+  def get_rank
+    @ranks = Hash[1,"Private",
+                  2,"Corporal",
+                  3,"Sergeant",
+                  4,"Staff Sergeant",
+                  5,"Gunnery Sergeant",
+                  6,"First Sergeant",
+                  7,"Sergeant Major",
+                  8,"Lieutenant",
+                  9,"Captain",
+                  10,"Major",
+                  11,"Lt. Colonel",
+                  12,"Colonel"]
+    @ranks[self.rank]
+  end
+
   def average
     #returns actual average, not average * 100
     (self.aim + self.sight + self.stealth + self.speed + self.hardiness + self.leadership)/600
