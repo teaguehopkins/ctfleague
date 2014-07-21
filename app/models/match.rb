@@ -8,12 +8,12 @@ class Match < ActiveRecord::Base
   scope :finished, -> { where(finished: true) }
   scope :active, -> { where(finished: [false, nil]) }
 
-  serialize :match_log
+  serialize :match_log, Array
 
   def log(event)
-    if self.match_log == nil
-      self.match_log = []
-    end
+    #if self.match_log == nil
+    #  self.match_log = []
+    #end
     self.match_log << event
   end
 
