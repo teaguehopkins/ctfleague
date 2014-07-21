@@ -4,7 +4,7 @@ class Team < ActiveRecord::Base
   has_one :team_ownership
   has_one :user, through: :team_ownership
 
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, :scope => :league
 
   def heal_bench_tokens
     self.tokens.off_squad.each do |token|

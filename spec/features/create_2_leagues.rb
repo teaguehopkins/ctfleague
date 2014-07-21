@@ -105,5 +105,102 @@ end
       @user1.memberships.first.league.matches.first.get_log.should_not be(nil)
       @user2.memberships.first.league.matches.first.get_log.should_not be(nil)
     end
+    #already fabricated first user
+    #@user1 = Fabricate(:user, username: "testuser1")
+    @user3 = Fabricate(:user, username: "testuser3")
+    in_browser(:one) do
+      click_link 'Sign Out'
+      visit '/'
+      click_link 'Sign In'
+      fill_in 'Email', with: 'testuser1'
+      fill_in 'Password', with: 'password'
+      click_button 'Sign in'
+      page.should have_content('Signed in successfully.')
+      page.should_not have_link("I'm Ready")
+      click_link 'New League'
+      fill_in 'League Name', with: 'Test League 2'
+      click_button 'create league'
+      fill_in 'Team Name', with: 'Team 1'
+      click_button 'create team'
+      fill_in 'Enter player emails', with: 'testuser3@example.com'
+      click_button 'Invite'
+      @league_key = @user1.leagues.last.league_key
+      @league_path = @user1.leagues.last.id
+    end
+    in_browser(:three) do
+      visit '/'
+      click_link 'Sign In'
+      fill_in 'Email', with: 'testuser3'
+      fill_in 'Password', with: 'password'
+      click_button 'Sign in'
+      page.should have_content('Signed in successfully.')
+      page.should_not have_link("I'm Ready")
+      visit '/leagues/' + @league_path.to_s
+      page.should have_content('Join the League')
+      fill_in 'Team Name', with: 'Team 2'
+      fill_in 'League Key', with: @league_key
+      click_button 'Join'
+    end
+    in_browser(:one) do
+      click_link 'User'
+      page.should have_content('League Name')
+      click_link 'Test League 2'
+      page.should have_content('Season 1')
+      click_button 'Begin Season'
+      @user1.leagues.last.drafts.first.tokens.length.should be(16)
+      draft_button = first(:button, 'Draft')
+      draft_button.click unless draft_button.nil?
+    end
+    in_browser(:three) do
+      click_link 'User'
+      click_link 'Test League 2'
+      click_button 'View Draft'
+      first(:button, 'Draft').click
+      draft_button = first(:button, 'Draft')
+      draft_button.click unless draft_button.nil?
+    end
+    while @user1.leagues.last.drafts.first.tokens.length > 0 do
+      in_browser(:three) do
+        visit current_path
+        draft_button = first(:button, 'Draft')
+        draft_button.click unless draft_button.nil?
+        draft_button = first(:button, 'Draft')
+        draft_button.click unless draft_button.nil?
+      end
+      in_browser(:one) do
+        visit current_path
+        draft_button = first(:button, 'Draft')
+        draft_button.click unless draft_button.nil?
+        draft_button = first(:button, 'Draft')
+        draft_button.click unless draft_button.nil?
+      end
+    end
+    #draft is now complete
+    @user1.leagues.last.drafts.first.tokens.length.should be(0)
+    in_browser(:one) do
+      click_link 'User'
+      click_link 'Test League 2'
+      click_button 'View My Team'
+      for i in 0..5
+          first(:button, 'Add').click
+      end
+      first(:link, 'Test League').click
+      click_button 'Ready'
+    end
+    in_browser(:three) do
+      click_link 'User'
+      click_link 'Test League 2'
+      click_button 'View My Team'
+      for i in 0..5
+          first(:button, 'Add').click
+      end
+      first(:link, 'Test League 2').click
+      click_button 'Ready'
+    end
+    in_browser(:one) do
+      visit current_path
+      @user1.memberships.last.league.matches.first.get_log.should_not be(nil)
+      @user3.memberships.first.league.matches.first.get_log.should_not be(nil)
+    end
   end
 end
