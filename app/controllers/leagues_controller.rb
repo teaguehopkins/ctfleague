@@ -64,6 +64,20 @@ class LeaguesController < ApplicationController
     end
   end
 
+  def destroy
+    @league = League.find(params[:id])
+
+    #only user with permission to destroy is commissioner.
+    @user = @league.commissioner
+
+    @league.destroy
+
+    respond_to do |format|
+      format.html { redirect_to user_path(@user) }
+      format.xml  { head :ok }
+    end
+  end
+
   private
 
   def league_params
