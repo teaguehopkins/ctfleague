@@ -22,4 +22,4 @@
               = "Yes"
           %td
             - if league.commissioner == @user
-              = link_to "Delete", league_path(league.id), :method => :delete, :confirm => 'This is irreversible. Are you sure you want to permanently delete this league?'
+              = link_to "Delete", league_path(league.id), data: { confirm: "This is irreversible. Are you sure you want to permanently delete this league?"}, method: :delete
