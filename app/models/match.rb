@@ -15,6 +15,7 @@ class Match < ActiveRecord::Base
     #  self.match_log = []
     #end
     self.match_log << event
+    self.save
   end
 
   def get_log
@@ -92,6 +93,7 @@ class Match < ActiveRecord::Base
         soldier.rank = index
       end
     end
+    soldier.save
   end
 
   def cumulative_sum(array)
