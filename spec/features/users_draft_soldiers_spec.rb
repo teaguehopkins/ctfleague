@@ -105,5 +105,18 @@ end
       @user1.memberships.first.league.matches.first.get_log.should_not be(nil)
       @user2.memberships.first.league.matches.first.get_log.should_not be(nil)
     end
+    in_browser(:two) do
+      click_link 'User'
+      page.should have_content 'Delete'
+      page.should_not have_link 'Delete'
+    end
+    in_browser(:one) do
+      click_link 'User'
+      page.should have_content 'Delete'
+      page.should have_link 'Delete'
+      page.should have_content 'Test League'
+      click_link 'Delete'
+      page.should_not have_content 'Test League'
+    end
   end
 end

@@ -10,6 +10,7 @@
       %th League Name
       %th Commissioner
       %th Active
+      %th Delete
     %tbody
       - @user.memberships.each do |membership|
         - league = membership.league
@@ -19,3 +20,6 @@
           %td
             - if league.active
               = "Yes"
+          %td
+            - if league.commissioner == @user
+              = link_to "Delete", league_path(league.id), data: { confirm: "This is irreversible. Are you sure you want to permanently delete this league?"}, method: :delete
