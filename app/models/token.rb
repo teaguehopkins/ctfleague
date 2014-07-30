@@ -8,4 +8,5 @@ class Token < ActiveRecord::Base
 
   scope :on_squad, -> { where(on_squad: true) }
   scope :off_squad, -> { where(on_squad: [false, nil]) }
+  
 end
