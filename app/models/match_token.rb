@@ -31,13 +31,12 @@ class MatchToken < ActiveRecord::Base
     if spotted
       if target.spotted == false
         self.match.log(self_soldier.last_name + " spotted " + target_soldier.last_name)
-        puts self_soldier.last_name + " spotted " + target_soldier.last_name
       end
       target.spotted = true
       target.save
     end
     if spotted == false && self.distance_to(target) < 100 && target.spotted == false
-      puts target.soldier.last_name + " (Stealth: "+ (target.soldier.stealth/100).to_s + ")" + " snuck past " + self.soldier.last_name
+      self.match.log(target.soldier.last_name + " (Stealth: "+ (target.soldier.stealth/100).to_s + ")" + " snuck past " + self.soldier.last_name)
     end
     spotted
   end
@@ -91,20 +90,19 @@ end
   def shoot(target)
     target_soldier = target.soldier
     self_soldier = self.soldier
-    puts self_soldier.last_name + " shot at " + target_soldier.last_name
+    self.match.log(self_soldier.last_name + " shot at " + target_soldier.last_name)
     percentage = self.hit_chance(target)
     roll = rand(1..100)
     hit = roll < percentage
     #puts "Shot Check: " + roll.to_s + " " + percentage.to_s
     if hit
-      self.match.log(self_soldier.last_name + " hit " + target_soldier.last_name)
       if self.distance_to(target) < 300
-        puts self_soldier.last_name + " hit " + target_soldier.last_name
+        self.match.log(self_soldier.last_name + " hit " + target_soldier.last_name)
       else
-        puts self_soldier.last_name + " sniped " + target_soldier.last_name + " at range: " + self.distance_to(target).to_s
+        self.match.log(self_soldier.last_name + " sniped " + target_soldier.last_name + " at range: " + self.distance_to(target).to_s)
       end
       target_soldier.damage += 1
-      puts target_soldier.last_name + " Damage: " + target_soldier.damage.to_s
+      self.match.log(target_soldier.last_name + " Damage: " + target_soldier.damage.to_s)
       target_soldier.save
       self.stun(target)
     end
@@ -120,7 +118,6 @@ end
     stunned = roll < percentage
     if stunned
       self.match.log(self_soldier.last_name + " disabled " + target_soldier.last_name)
-      puts self_soldier.last_name + " disabled " + target_soldier.last_name
       target_soldier.active = false
       target_soldier.save
     end
@@ -148,7 +145,6 @@ end
       if (self.side == 1 && self.xloc == 1000) || (self.side == 2 && self.xloc == 0)
         self.flag = true
         match.log(self.token.units.first.soldiers.first.last_name + " grabbed the flag!")
-        puts self.token.units.first.soldiers.first.last_name + " grabbed the flag!"
         self.direction = self.direction * -1
       end
     end
@@ -156,6 +152,10 @@ end
 
   def soldier
     self.token.units.first.soldiers.first
+  end
+
+  def init
+    self.soldier.speed
   end
 
   def opponents_visible

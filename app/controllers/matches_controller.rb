@@ -75,21 +75,22 @@ class MatchesController < ApplicationController
       soldier.save
     end
 =end
+
     @flagwinner = nil
     until @flagwinner != nil do
-      puts "======================================= New Round ======================================="
-      @match.match_tokens.each do |match_token|
+      @match.log("======================================= New Round =======================================")
+      @match.match_tokens.sort { |a, b| b.init <=> a.init }.each do |match_token| #order tokens by speed
         vis = ""
         vis = "     Vis" if match_token.spotted
         vis = vis + "     Flag" if match_token.flag
         if match_token.side == 1 && match_token.soldier.active
-          puts match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis
+          @match.log(match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
         end
         if match_token.side == 2 && match_token.soldier.active
-          puts "                                        " + match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis
+          @match.log("                                        " + match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
         end
       end
-
+    @match.log("--------------------------------------- Actions ---------------------------------------")
       sim_one_turn
     end
       @flagwinner.winner = true
@@ -122,10 +123,10 @@ class MatchesController < ApplicationController
   def flag_winner(match_token)
     #check flag win conditions
     if match_token.flag && match_token.xloc == 0 && match_token.side == 1
-      @match.log(match_token.soldier.last_name + " has captured the flag.")
+      @match.log(match_token.soldier.last_name + " has captured the flag!")
       @flagwinner = @match.match_members.first
     elsif match_token.flag && match_token.xloc == 1000 && match_token.side == 2
-      @match.log(match_token.soldier.last_name + " has captured the flag.")
+      @match.log(match_token.soldier.last_name + " has captured the flag!")
       @flagwinner = @match.match_members.last
     end
   end
