@@ -67,27 +67,19 @@ class MatchesController < ApplicationController
   end
 
   def simulate_match
-    #assign random damage
-=begin
-    @match.tokens.each do |token|
-      soldier = token.units.first.soldiers.first
-      soldier.damage = soldier.damage + rand(0..2)
-      soldier.save
-    end
-=end
 
     @flagwinner = nil
     until @flagwinner != nil do
       @match.log("======================================= New Round =======================================")
       @match.match_tokens.sort { |a, b| b.init <=> a.init }.each do |match_token| #order tokens by speed
         vis = ""
-        vis = "     Vis" if match_token.spotted
-        vis = vis + "     Flag" if match_token.flag
+        vis = "_____Vis" if match_token.spotted
+        vis = vis + "_____Flag" if match_token.flag
         if match_token.side == 1 && match_token.soldier.active
           @match.log(match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
         end
         if match_token.side == 2 && match_token.soldier.active
-          @match.log("                                        " + match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
+          @match.log("_____________________________________________" + match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
         end
       end
     @match.log("--------------------------------------- Actions ---------------------------------------")
@@ -121,14 +113,17 @@ class MatchesController < ApplicationController
   end
 
   def flag_winner(match_token)
-    #check flag win conditions
+    #check flag win conditions - does not handle ties
     if match_token.flag && match_token.xloc == 0 && match_token.side == 1
       @match.log(match_token.soldier.last_name + " has captured the flag!")
-      @flagwinner = @match.match_members.first
+      @flagwinner = @match.match_members.where(user_id: @team_1.user.id).first
+      @match.log(@team_1.name + " wins!")
     elsif match_token.flag && match_token.xloc == 1000 && match_token.side == 2
       @match.log(match_token.soldier.last_name + " has captured the flag!")
-      @flagwinner = @match.match_members.last
+      @match.log(@team_2.name + " wins!")
+      @flagwinner = @match.match_members.where(user_id: @team_2.user.id).first
     end
+
   end
 
   def roto_winner
