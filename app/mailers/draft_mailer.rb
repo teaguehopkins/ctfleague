@@ -20,4 +20,15 @@ class DraftMailer < ActionMailer::Base
     @member = @current_snake_position.user
     mail(to: @member.email, subject: 'It is your turn in the draft!', host: 'example.com').deliver
   end
+
+  def draft_end_email(draft)
+    @snake_positions = draft.snake_positions
+    @league = draft.league
+    @draft = draft
+    @snake_positions.each do |sp|
+      @snake_position = sp
+      @member = sp.user
+      mail(to: @member.email, subject: 'Your draft is complete', host: 'example.com').deliver
+    end
+  end
 end

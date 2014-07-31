@@ -38,6 +38,10 @@ class Draft < ActiveRecord::Base
     self.save
   end
 
+  def send_draft_end_emails
+    DraftMailer.draft_end_email(self)
+  end
+
   def send_draft_beginning_emails
     DraftMailer.draft_beginning_email(self)
   end

@@ -62,8 +62,21 @@ class MatchesController < ApplicationController
       ready = false if member.ready != true
     end
 
-    start if ready
-    redirect_to league_path(@league), notice: "Waiting for your opponent to be ready." if !ready
+    if ready
+      @match.match_members.each do |member|
+        member.ready = false
+        member.save
+      end
+      start
+    end
+
+    if !ready
+      if @match.match_log == [] #should always be true before a match begins
+        redirect_to league_path(@league), notice: "Waiting for your opponent to be ready."
+      else #this should only happen if the Ready button was already clicked for this match
+        redirect_to league_path(@league), notice: "The match has been finished."
+      end
+    end
   end
 
   def simulate_match
