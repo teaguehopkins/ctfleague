@@ -9,7 +9,6 @@
     %p
       The winner was #{@winner.username}.
     %h2 Detailed Results
-    -#%p #{@log}
     - @log.each do |event|
       %p= event
     %h2 Next Match

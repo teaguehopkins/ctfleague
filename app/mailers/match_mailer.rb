@@ -7,7 +7,8 @@ class MatchMailer < ActionMailer::Base
     @league = match.league
     @match = match
     @log = match.get_log
-    @winner = @match_members.find(&:winner?).user
+    #@winner = @match_members.find(&:winner?).user
+    @winner = @match.match_members.where(winner: true).first.user
     @match_members.each do |mm|
       @member = mm
       @user = @member.user
