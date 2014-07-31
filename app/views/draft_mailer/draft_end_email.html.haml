@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %body
+    %h1 The draft has ended for #{@league.name}!
+    %p
+      Greetings #{@member.username},
+    %p The draft has ended for #{@league.name}.
+    %p Be sure to set up your team for the first match.
+    %p
+      = link_to "View your league", league_url(@league)

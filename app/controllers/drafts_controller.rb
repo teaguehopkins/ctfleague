@@ -42,6 +42,7 @@ class DraftsController < ApplicationController
       if @draft.tokens.length == 0
         @league.drafting = false
         @league.save
+        @draft.send_draft_end_emails
         @league.generate_round_robin
         redirect_to league_path(@league.id)
       else
