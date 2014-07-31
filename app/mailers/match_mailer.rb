@@ -18,7 +18,7 @@ class MatchMailer < ActionMailer::Base
             @opponent = @match_members.first.user
         end
       @opponent_team = @opponent.teams.select{|team| team.league == @league}.first
-      mail(to: @user.email, subject: 'Match Results!', host: 'example.com').deliver
+      mail(to: @user.email, subject: 'Match Results!', host: 'heavymetalalpha.herokuapp.com').deliver
     end
   end
 end

@@ -8,7 +8,7 @@ class DraftMailer < ActionMailer::Base
     @snake_positions.each do |sp|
       @snake_position = sp
       @member = sp.user
-      mail(to: @member.email, subject: 'The draft has begun!', host: 'example.com').deliver
+      mail(to: @member.email, subject: 'The draft has begun!', host: 'heavymetalalpha.herokuapp.com').deliver
     end
   end
 
@@ -18,7 +18,7 @@ class DraftMailer < ActionMailer::Base
     @current_snake_position = draft.snake_positions.find_by position: draft.current_position
     @draft = draft
     @member = @current_snake_position.user
-    mail(to: @member.email, subject: 'It is your turn in the draft!', host: 'example.com').deliver
+    mail(to: @member.email, subject: 'It is your turn in the draft!', host: 'heavymetalalpha.herokuapp.com').deliver
   end
 
   def draft_end_email(draft)
@@ -28,7 +28,7 @@ class DraftMailer < ActionMailer::Base
     @snake_positions.each do |sp|
       @snake_position = sp
       @member = sp.user
-      mail(to: @member.email, subject: 'Your draft is complete', host: 'example.com').deliver
+      mail(to: @member.email, subject: 'Your draft is complete', host: 'heavymetalalpha.herokuapp.com').deliver
     end
   end
 end
