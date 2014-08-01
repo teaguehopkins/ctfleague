@@ -51,8 +51,14 @@ class League < ActiveRecord::Base
     self.matches.each do |match|
       end_of_round = false if !match.finished
     end
+    if end_of_round
+      send_end_of_round_emails
+      check_for_end_of_tournament
+    end
+  end
 
-    check_for_end_of_tournament if end_of_round
+  def send_end_of_round_emails
+    LeagueMailer.round_end_emails(self)
   end
 
   def check_for_end_of_tournament
