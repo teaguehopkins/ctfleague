@@ -3,6 +3,7 @@
 #                            'deploy:push',
 #                            'deploy:migrate',
 #                            'deploy:restart']
+desc "Deploy to production & Migrate DB, after checking tests."
 task :deploy_production => ['deploy:set_production_app',
                             'deploy:push',
                             'deploy:migrate',
