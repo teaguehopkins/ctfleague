@@ -106,13 +106,10 @@ class Match < ActiveRecord::Base
   end
 
   def award_points
-    self.match_members.each do |match_member|
-      if match_member.winner
-        membership = self.league.memberships.find_by_user_id(match_member.user_id)
-        membership.points = membership.points + 1
-        membership.save
-      end
-    end
+    winner = self.match_members.where(winner: true).first
+    membership = self.league.memberships.find_by_user_id(winner.user_id)
+    membership.points = membership.points + 1
+    membership.save
   end
 
   def increase_unit_stats
