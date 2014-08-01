@@ -2,6 +2,8 @@
 %h2.draft_h2= link_to "#{@league.name}", league_path(@league.id)
 
 %h2 Current Squad
+- if @league.season == 1
+  %p.tips You may assign up to 6 soldiers to your current squad. When you click Ready, your mission with launch with the current squad.
 %table
   %thead
     %th Rank
@@ -37,6 +39,20 @@
           = simple_form_for([@league, @team, token]) do |f|
             = f.hidden_field :on_squad, :value => false
             = f.button :submit, "Remove", :class => 'table_button'
+
+- if @league.active
+  - if @league.users.include?(current_user)
+    - if !@league.drafting
+      %h2.league_h2 Upcoming Match
+      - @league.matches.active.each do |match|
+        - p1 = match.match_members.first.user
+        - p2 = match.match_members.last.user
+        - t1 = p1.teams.find_by_league_id(@league.id)
+        - t2 = p2.teams.find_by_league_id(@league.id)
+        - if p1 == current_user || p2 == current_user
+          %h3.active_match #{t1.name} (#{p1.username}) vs. #{t2.name} (#{p2.username})
+        - if p1 == current_user && !match.match_members.first.ready || p2 == current_user && !match.match_members.last.ready
+          = button_to "Ready!", ready_league_match_path(@league, match), :class => 'draft_button'
 
 %h2 Bench
 %table

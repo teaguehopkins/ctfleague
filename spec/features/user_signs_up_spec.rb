@@ -5,7 +5,7 @@ feature "User signs up" do
     visit '/'
     click_link "Sign In"
     click_link "Sign up"
-    fill_in "Username", with: "joe"
+    fill_in "Display Name", with: "joe"
     fill_in "Email", with: "joe@example.com"
     fill_in "Password", with: "mypassword", :match => :prefer_exact
     fill_in "Password confirmation", with: "mypassword"
