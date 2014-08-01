@@ -4,7 +4,7 @@
 #                            'deploy:migrate',
 #                            'deploy:restart']
 desc "Deploy to production & Migrate DB, after checking tests."
-task :deploy_production => ['deploy:set_production_app',
+task :deploy => ['deploy:set_production_app',
                             'deploy:push',
                             'deploy:migrate',
                             'deploy:post_deploy',
@@ -30,7 +30,8 @@ namespace :deploy do
 
     if system 'bundle exec rspec --fail-fast'
       puts "Deploying #{BRANCH} to #{APP}..."
-      puts `git push -f git@heroku.com:#{APP}.git #{BRANCH}:master`
+      #puts `git push -f git@heroku.com:#{APP}.git #{BRANCH}:master`
+      puts `git push heroku master`
     else
       puts "FIX YOUR TESTS"
       fail
