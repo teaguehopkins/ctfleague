@@ -43,7 +43,7 @@
   - if !@league.users.include?(current_user)
     %h2.league_h2 Join the League
     = form_tag('/join', method: 'post') do
-      = label_tag(:team_name, "Team Name")
+      = label_tag(:team_name, "Choose a Team Name")
       = text_field_tag(:team_name)
       = label_tag(:league_key, "League Key")
       = text_field_tag(:league_key)

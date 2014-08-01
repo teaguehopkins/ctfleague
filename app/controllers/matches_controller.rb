@@ -2,6 +2,7 @@ class MatchesController < ApplicationController
   def ready
     @match = Match.find(params[:id])
     @league = League.find(params[:league_id])
+    team = current_user.teams.find_by_league_id(@league.id)
 
     if check_squad_size
       match_member = @match.match_members.find_by_user_id(current_user.id)
@@ -9,7 +10,7 @@ class MatchesController < ApplicationController
       match_member.save
       check_if_both_are_ready
     else
-      redirect_to league_path(@league), alert: "You must have 6 units on your current squad."
+      redirect_to league_team_path(@league, team), alert: "You may not have more than 6 units on your current squad."
     end
   end
 
@@ -28,8 +29,7 @@ class MatchesController < ApplicationController
 
   def check_squad_size
     team = current_user.teams.find_by_league_id(@league.id)
-
-    if team.tokens.on_squad.length == 6
+    if team.tokens.on_squad.length <= 6
       true
     else
       false
@@ -37,12 +37,13 @@ class MatchesController < ApplicationController
   end
 
   def check_if_both_are_ready
-    ready = true
+    both_ready = true
     @match.match_members.each do |member|
-      ready = false if member.ready != true
+      both_ready = false if member.ready != true
     end
 
-    if ready
+    if both_ready
+      #reset ready before starting
       @match.match_members.each do |member|
         member.ready = false
         member.save
@@ -50,7 +51,7 @@ class MatchesController < ApplicationController
       start
     end
 
-    if !ready
+    if !both_ready
       if @match.match_log == [] #should always be true before a match begins
         redirect_to league_path(@league), notice: "Waiting for your opponent to be ready."
       else #this should only happen if the Ready button was already clicked for this match
