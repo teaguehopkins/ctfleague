@@ -1,0 +1,31 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %body
+    %h1 Daily Status Update for #{@league.name}
+    %p
+    %h2.league_h2 Upcoming Matches
+    - @league.matches.active.each do |match|
+      - p1 = match.match_members.first.user
+      - p2 = match.match_members.last.user
+      - t1 = p1.teams.find_by_league_id(@league.id)
+      - t2 = p2.teams.find_by_league_id(@league.id)
+      %h3.active_match #{t1.name} (#{p1.username}) vs. #{t2.name} (#{p2.username})
+  -if !@user_ready
+    %p= link_to "Ready Your Team", league_url(@league)
+  -else
+    %p Your team is set. Waiting for opponent.
+  -if @league.matches.finished.where(season: @league.season).length > 0
+    %h2.league_h2 Match Results from this Round
+    - @league.matches.finished.where(season: @league.season).each do |match|
+      - p1 = match.match_members.first.user
+      - p2 = match.match_members.last.user
+      - if match.match_members.first.winner
+        %h3.finished_match
+          %span.winner #{p1.username}
+          defeats #{p2.username}
+      - else
+        %h3.finished_match
+          %span.winner #{p2.username}
+          defeats #{p1.username}

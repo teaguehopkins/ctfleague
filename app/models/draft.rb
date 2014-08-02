@@ -71,7 +71,9 @@ class Draft < ActiveRecord::Base
     @recent_picks = Array.new
     if self.league.get_all_soldiers != []
       self.league.get_all_soldiers.sort!{|a,b|a.updated_at <=> b.updated_at}.each do |soldier|
-        @recent_picks << soldier
+        if soldier.age == 18
+          @recent_picks << soldier
+        end
       end
     end
     @number_to_return = self.league.teams.length*2
