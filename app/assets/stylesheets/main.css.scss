@@ -68,6 +68,10 @@ form {
     width: 100%;
   }
 
+  input.boolean {
+    width: inherit;
+  }
+
   .hint {
     font-size: .8em;
   }

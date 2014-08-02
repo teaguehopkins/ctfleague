@@ -3,11 +3,15 @@
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
   %body
-    %h1 You have been invited to a league in Heavy Metal!
+    %h1 #{@commissioner} invited you to a league in Heavy Metal!
+    %h2 First League?
     %p
-      If you are already a member of Heavy Metal, follow the link below to accept the invitation. You'll need to enter your League Key, which is <strong>#{@league_key}</strong>.
+      %span If this is your first Heavy Metal league,
+      %span= link_to "sign up", new_user_registration_url()
+      %span for an account first, then come back to this email for your league-specific information.
+    %h2 Got your account?
+    %p Already have an account, or just completed step one? Now you can accept the invitation to your league!
     %p
-      If you aren't yet a member, please sign up for Heavy Metal, then follow the link below.
-    %p
-      To log in to the site, just follow
-      = link_to "this link.", league_url(@league_id)
+      Enter your League Key, which is <strong>#{@league_key}</strong> on the
+      %span= link_to "#{@league.name} league page.", league_url(@league_id)
+    %h2 League Key: <strong>#{@league_key}</strong>
