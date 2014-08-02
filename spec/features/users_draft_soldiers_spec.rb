@@ -62,6 +62,8 @@ end
       draft_button = first(:button, 'Draft')
       draft_button.click unless draft_button.nil?
     end
+    StatusMailer.default_url_options = { :host => 'localhost' }
+    StatusMailer.draft_status_emails()
     while @user1.leagues.first.drafts.first.tokens.length > 0 do
       in_browser(:two) do
         visit current_path
@@ -90,6 +92,7 @@ end
       first(:link, 'Test League').click
       click_button 'Ready'
     end
+    StatusMailer.match_status_emails()
     in_browser(:two) do
       click_link 'User'
       click_link 'Test League'

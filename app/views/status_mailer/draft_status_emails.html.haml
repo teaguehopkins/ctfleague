@@ -1,0 +1,40 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %body
+    %h1 Daily Status Update for #{@league.name}
+    %p
+      #{@picking_user.username} has the current draft pick.
+    %p= link_to "View the Draft", league_draft_url(@league, @draft)
+  -if @recent_picks.length != 0
+    %h2.draft_h2 Recent Picks
+    %table
+      %thead
+        %th User
+        %th Last Name
+        %th First Name
+        %th Aim
+        %th Sight
+        %th Stealth
+        %th Speed
+        %th Hardiness
+        %th Leadership
+        %th Average
+        %th Timestamp
+      %tbody
+        - @recent_picks.each do |soldier|
+          %tr
+            %td= soldier.unit.token.team.user.username
+            %td= soldier.last_name
+            %td= soldier.first_name
+            %td= soldier.aim/100
+            %td= soldier.sight/100
+            %td= soldier.stealth/100
+            %td= soldier.speed/100
+            %td= soldier.hardiness/100
+            %td= soldier.leadership/100
+            %td= soldier.average
+            %td= soldier.updated_at
+  -else
+    %p There have not been any picks in this draft yet.
