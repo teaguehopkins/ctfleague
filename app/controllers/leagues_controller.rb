@@ -38,9 +38,7 @@ class LeaguesController < ApplicationController
 
     emails = params[:emails].split(',').map!{|e| e.strip}
 
-    league_key = @league.league_key
-
-    LeagueMailer.invite_email(emails, @league.id, league_key).deliver
+    LeagueMailer.invite_email(emails, @league).deliver
 
     redirect_to league_path(@league.id), notice: "Your invites have been sent!"
   end

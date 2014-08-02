@@ -44,12 +44,11 @@ feature "User signs up" do
   end
 
   scenario "failed signup" do
-    pending "Is it possible to test HTML 5 required this way?"
     Fabricate(:user, email: "joe@example.com", username: "joe")
     visit '/'
     click_link "I want to enlist!"
     fill_in "Email", with: "joe@example.com"
-    fill_in "Username", with: "joe"
+    fill_in "Display Name", with: "joe"
     fill_in "Password", with: "mypassword", :match => :prefer_exact
     fill_in "Password confirmation", with: "notthesame"
     # PR 1: Captchas
@@ -57,37 +56,35 @@ feature "User signs up" do
     page.should_not have_content "Welcome to Squmblr"
     page.should have_content "Please review the problems below:"
 
-    page.should have_error("has already been taken", on: "Email")
-    page.should have_error("doesn't match Password", on: "Password confirmation")
-    page.should have_error("has already been taken", on: "Username")
+    page.should have_content("has already been taken")
+    page.should have_content("doesn't match Password")
+    page.should have_content("has already been taken")
   end
 
   scenario "failed signup because invalid characters in username" do
-    pending
     visit '/'
     click_link "I want to enlist!"
     fill_in "Email", with: "joe@example.com"
-    fill_in "Username", with: "joe@example"
+    fill_in "Display Name", with: "joe@example"
     fill_in "Password", with: "mypassword", :match => :prefer_exact
     fill_in "Password confirmation", with: "mypassword"
     click_button "Sign up"
     page.should_not have_content "Welcome to Squmblr"
-    page.should have_content "Your account could not be created."
-    page.should have_error("username can only contain letters", on: "Username")
+    #page.should have_content "Your account could not be created."
+    page.should have_content("username can only contain letters and numbers")
   end
 
   scenario "failed signup because invalid characters in username" do
-    pending
     visit '/'
-    click_link "I'm Ready!"
+    click_link "I want to enlist!"
     fill_in "Email", with: "joe@example.com"
-    fill_in "Username", with: "joe joe"
+    fill_in "Display Name", with: "joe joe"
     fill_in "Password", with: "mypassword", :match => :prefer_exact
     fill_in "Password confirmation", with: "mypassword"
     click_button "Sign up"
     page.should_not have_content "Welcome to Squmblr"
-    page.should have_content "Your account could not be created."
-    page.should have_error("username can only contain letters", on: "Username")
+    #page.should have_content "Your account could not be created."
+    page.should have_content("username can only contain letters and numbers")
   end
 
   scenario "user receives welcome email" do

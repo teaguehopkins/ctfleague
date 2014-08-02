@@ -23,3 +23,5 @@
           %td
             - if league.commissioner == @user
               = link_to "Delete", league_path(league.id), data: { confirm: "This is irreversible. Are you sure you want to permanently delete this league?"}, method: :delete
+
+%p.small_text_box Don't see a league here? Check your invite email for instructions.
