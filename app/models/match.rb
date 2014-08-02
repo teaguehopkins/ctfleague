@@ -116,27 +116,19 @@ class Match < ActiveRecord::Base
     side_1 = self.match_tokens.where(side: 1).to_a
     side_2 = self.match_tokens.where(side: 2).to_a
 
-    side_1.map! do |match_token|
-      match_token.token.units.first.soldiers.first
-    end
-
-    side_2.map! do |match_token|
-      match_token.token.units.first.soldiers.first
-    end
-
-    side_1 = side_1.sort_by do |soldier|
-      soldier.leadership
-    end
-
-    side_2 = side_2.sort_by do |soldier|
-      soldier.leadership
-    end
-
     develop_soldiers(side_1)
     develop_soldiers(side_2)
   end
 
   def develop_soldiers(side)
+    side.map! do |match_token|
+      match_token.token.units.first.soldiers.first
+    end
+
+    side = side.sort_by do |soldier|
+      soldier.leadership
+    end
+
     side.each do |soldier|
       bonus = 200 * ((side.last.leadership + 5000)/10000.00)
       soldier.aim = soldier.aim + bonus

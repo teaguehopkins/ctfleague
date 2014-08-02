@@ -14,13 +14,4 @@ class Team < ActiveRecord::Base
     end
   end
 
-  def total_stat(stat_name)
-    total_stat = 0
-    tokens.on_squad.each do |token|
-      soldier = token.units.first.soldiers.first
-      total_stat += soldier.method(stat_name).call
-    end
-    total_stat
-  end
-
 end
