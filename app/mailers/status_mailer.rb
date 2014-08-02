@@ -15,7 +15,7 @@ class StatusMailer < ActionMailer::Base
         @picking_user = @current_snake_position.user
         @memberships.each do |membership|
           @user = membership.user
-          mail(to: @user.email, subject: league.name + ' - SitRep', host: 'heavymetalalpha.herokuapp.com').deliver
+          mail(to: @user.email, subject: league.name + ' - Status Update', host: 'heavymetalalpha.herokuapp.com').deliver
         end
       end
     end
@@ -34,9 +34,12 @@ class StatusMailer < ActionMailer::Base
               if match_member.ready && match_member.user == @user
                 @user_ready = true
               end
+              if match_member.match.finished == true
+                @finished = true
+              end
             end
           end
-          mail(to: @user.email, subject: league.name + ' - SitRep', host: 'heavymetalalpha.herokuapp.com').deliver
+          mail(to: @user.email, subject: league.name + ' - Status Update', host: 'heavymetalalpha.herokuapp.com').deliver
         end
       end
     end

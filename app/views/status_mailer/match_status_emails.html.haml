@@ -15,7 +15,10 @@
   -if !@user_ready
     %p= link_to "Ready Your Team", league_url(@league)
   -else
-    %p Your team is set. Waiting for opponent.
+    -if !@finished
+      %p Your team is set. Waiting for opponent.
+    -else
+      %p Your match is complete. Waiting for round to end.
   -if @league.matches.finished.where(season: @league.season).length > 0
     %h2.league_h2 Match Results from this Round
     - @league.matches.finished.where(season: @league.season).each do |match|
