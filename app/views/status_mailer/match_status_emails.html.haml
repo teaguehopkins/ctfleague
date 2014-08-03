@@ -12,13 +12,12 @@
       - t1 = p1.teams.find_by_league_id(@league.id)
       - t2 = p2.teams.find_by_league_id(@league.id)
       %h3.active_match #{t1.name} (#{p1.username}) vs. #{t2.name} (#{p2.username})
-  -if !@user_ready
-    %p= link_to "Ready Your Team", league_url(@league)
+  -if @finished
+    %p Your match is complete. Waiting for round to end.
+  -elsif @user_ready
+    %p Your team is set. Waiting for opponent.
   -else
-    -if !@finished
-      %p Your team is set. Waiting for opponent.
-    -else
-      %p Your match is complete. Waiting for round to end.
+    %p= link_to "Ready Your Team", league_url(@league)
   -if @league.matches.finished.where(season: @league.season).length > 0
     %h2.league_h2 Match Results from this Round
     - @league.matches.finished.where(season: @league.season).each do |match|
