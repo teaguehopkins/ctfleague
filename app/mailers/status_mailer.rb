@@ -23,19 +23,23 @@ class StatusMailer < ActionMailer::Base
 
   def match_status_emails()
     @leagues = League.all
-    @leagues.each do |league|
+    @leagues.each do |league| #for each active or drafting league
       if !league.drafting && league.active
         @league = league
         @memberships = league.memberships
-        @memberships.each do |membership|
+        @memberships.each do |membership| #for each user
           @user = membership.user
-          @league.matches.active.each do |active_match|
-            active_match.match_members.each do |match_member|
-              if match_member.ready && match_member.user == @user
-                @user_ready = true
-              end
-              if match_member.match.finished == true
-                @finished = true
+          @finished = true
+          @user_ready = false
+          @league.matches.active.each do |active_match| #for each active match
+            active_match.match_members.each do |match_member| #for each member of an active match
+              if match_member.user == @user #found the user in an active match
+                if match_member.ready == true #the user is ready
+                  @user_ready = true
+                end
+                if match_member.match.finished != true #the match is not finished (should always be true because match is active)
+                  @finished = false
+                end
               end
             end
           end
