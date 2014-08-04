@@ -85,16 +85,24 @@ form {
   }
 }
 
+.tablesorter-header-inner{
+  font-size: 16px;
+  text-align: center;
+  }
+
+
 table {
   width: 70%;
   margin: auto;
   border-spacing: 0px;
 
   thead {
+    font-size: 14px;
     th {
       font-weight: 400;
       background-color: #999999;
       color: white;
+
     }
 
     th.damage {
@@ -103,6 +111,7 @@ table {
   }
 
   tbody {
+    font-size: 16px;
     text-align: center;
 
     tr:nth-child(even) {

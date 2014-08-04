@@ -11,7 +11,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'simple_form'
 gem 'jquery-rails'
-gem 'turbolinks'
+#gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'rubystats'
 gem 'faker'
@@ -23,6 +23,11 @@ gem 'rails_12factor', group: :production
 gem 'spring',        group: :development
 
 gem 'simplecov', :require => false, :group => :test
+
+gem 'jquery-tablesorter'
+
+#avoid issues with turbolinks and jquery
+#gem 'jquery-turbolinks'
 
 group :development, :test do
   gem 'rspec-rails', '<2.99'
