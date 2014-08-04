@@ -12,13 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+//= require jquery-tablesorter
 //= require_tree .
 
-
 //Don't know why this stuff doesn't work. Going to use backend validation instead and come back to this later.
-
-// $( document ).ready(function() {
 
 // $('.draft_button').one('submit', function() {      $(this).find('input[type="submit"]').attr('disabled','disabled').attr('value', 'Processing...');   });
 
