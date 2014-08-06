@@ -12,6 +12,7 @@
         - if user_signed_in?
           %li= link_to "My Leagues", user_path(current_user)
           %li= link_to "New League", new_league_path
+          %li= link_to "Rulebook", "https://docs.google.com/document/d/1-VYxP5S--v4v-itVbjDDvxROSMcDtELzPWn0Qmrgym0/edit?usp=sharing"
       %ul.devise_navigation
         - if user_signed_in?
           %li= link_to "User: #{current_user.username}", user_path(current_user)

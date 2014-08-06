@@ -17,7 +17,7 @@
     %th Hardiness
     %th Leadership
     %th Average
-    %th.damage Damage
+    %th.damage Injuries
     %th Remove from Squad
   %tbody
     - @team.tokens.on_squad.each do |token|
@@ -31,7 +31,7 @@
         %td= soldier.sight/100
         %td= soldier.stealth/100
         %td= soldier.speed/100
-        %td= (soldier.effective_hardiness/100).to_s() +" / "+ (soldier.hardiness/100).to_s()
+        %td= (soldier.hardiness/100)
         %td= soldier.leadership/100
         %td= soldier.average
         %td= soldier.damage
@@ -68,7 +68,7 @@
     %th Hardiness
     %th Leadership
     %th Average
-    %th.damage Damage
+    %th.damage Injuries
     %th Add to Squad
   %tbody
     - @team.tokens.off_squad.each do |token|
@@ -83,7 +83,7 @@
           %td= soldier.sight/100
           %td= soldier.stealth/100
           %td= soldier.speed/100
-          %td= (soldier.effective_hardiness/100).to_s() +" / "+ (soldier.hardiness/100).to_s()
+          %td= soldier.hardiness/100
           %td= soldier.leadership/100
           %td= soldier.average
           %td= soldier.damage
