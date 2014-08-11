@@ -15,7 +15,7 @@
 //= require jquery-tablesorter
 //= require_tree .
 
-//Don't know why this stuff doesn't work. Going to use backend validation instead and come back to this later.
+//TODO Don't know why this stuff doesn't work. Going to use backend validation instead and come back to this later.
 
 // $('.draft_button').one('submit', function() {      $(this).find('input[type="submit"]').attr('disabled','disabled').attr('value', 'Processing...');   });
 

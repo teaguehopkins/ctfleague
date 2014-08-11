@@ -19,7 +19,10 @@
         - t2 = p2.teams.find_by_league_id(@league.id)
         %h3.active_match #{t1.name} (#{p1.username}) vs. #{t2.name} (#{p2.username})
         - if p1 == current_user && !match.match_members.first.ready || p2 == current_user && !match.match_members.last.ready
-          = button_to "Ready!", ready_league_match_path(@league, match), :class => 'draft_button'
+          - if current_user.teams.find_by_league_id(@league.id).tokens.on_squad.length < 6
+            = button_to "Ready!", ready_league_match_path(@league, match), :class => 'draft_button', data: { confirm: "You are not using all your available slots on your current squad. Are you sure you want to submit?"}
+          - else
+            = button_to "Ready!", ready_league_match_path(@league, match), :class => 'draft_button'
       - @league.matches.finished.where(season: @league.season).each do |match|
         - p1 = match.match_members.first.user
         - p2 = match.match_members.last.user
