@@ -19,7 +19,7 @@
   -else
     %p= link_to "Ready Your Team", league_url(@league)
   -if @league.matches.finished.where(season: @league.season).length > 0
-    %h2.league_h2 Match Results from this Round
+    %h2.league_h2 Match Results from this Season
     - @league.matches.finished.where(season: @league.season).each do |match|
       - p1 = match.match_members.first.user
       - p2 = match.match_members.last.user
