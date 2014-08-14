@@ -112,7 +112,7 @@ end
   def stun(target)
     target_soldier = target.token.units.first.soldiers.first
     self_soldier = self.token.units.first.soldiers.first
-    power = 40
+    power = 30 #TODO Make this pull from equipment
     percentage = 100 - (target_soldier.effective_hardiness/100 - power)
     roll = rand(1..100)
     stunned = roll < percentage
