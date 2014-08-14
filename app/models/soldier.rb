@@ -50,7 +50,7 @@ class Soldier < ActiveRecord::Base
     truehard
   end
 
-  def effective_speed #TODO Make formulas use this
+  def effective_speed
     truespeed = self.speed - self.damage * 1000
     if truespeed < 1
       truespeed = 1
@@ -58,7 +58,7 @@ class Soldier < ActiveRecord::Base
     truespeed
   end
 
-  def effective_stealth #TODO Make formulas use this
+  def effective_stealth
     truestealth = self.stealth - self.damage * 1000
     if truestealth < 1
       truestealth = 1
@@ -66,14 +66,13 @@ class Soldier < ActiveRecord::Base
     truestealth
   end
 
-  def effective_aim #TODO Make formulas use this
+  def effective_aim
     trueaim = self.aim - self.damage * 500
     if trueaim < 1
       trueaim = 1
     end
     trueaim
   end
-
 
   def age_up
     self.age = self.age + 1
