@@ -120,7 +120,7 @@ class Match < ActiveRecord::Base
     develop_soldiers(side_2)
   end
 
-  def develop_soldiers(side)
+  def develop_soldiers(side) #TODO Make this affected by injuries
     side.map! do |match_token|
       match_token.token.units.first.soldiers.first
     end

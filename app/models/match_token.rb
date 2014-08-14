@@ -24,7 +24,7 @@ class MatchToken < ActiveRecord::Base
     target_soldier = target.token.units.first.soldiers.first
     self_soldier = self.token.units.first.soldiers.first
     distance_bonus = [0,(100 - 5 * self.distance_to(target))].max/100.0 + 1
-    percentage = self_soldier.sight/100 * distance_bonus - target_soldier.stealth/100
+    percentage = self_soldier.sight/100 * distance_bonus - target_soldier.effective_stealth/100
     roll = rand(1..100)
     spotted = roll < percentage
     #puts "Spot Check: " + roll.to_s + " " + percentage.to_s
@@ -36,7 +36,7 @@ class MatchToken < ActiveRecord::Base
       target.save
     end
     if spotted == false && self.distance_to(target) < 100 && target.spotted == false
-      self.match.log(target.soldier.last_name + " (Stealth: "+ (target.soldier.stealth/100).to_s + ")" + " snuck past " + self.soldier.last_name)
+      self.match.log(target.soldier.last_name + " (Stealth: "+ (target.soldier.effective_stealth/100).to_s + ")" + " snuck past " + self.soldier.last_name)
     end
     spotted
   end
@@ -79,7 +79,7 @@ end
     target_soldier = target.soldier
     self_soldier = self.soldier
     distance_bonus = [0,(100 - 10 * self.distance_to(target))].max/100.0 + 1
-    percentage = self_soldier.aim/100 * distance_bonus - (target_soldier.speed/200)
+    percentage = self_soldier.effective_aim/100 * distance_bonus - (target_soldier.effective_speed/200)
   end
 
   def can_hit(target)
@@ -112,7 +112,7 @@ end
   def stun(target)
     target_soldier = target.token.units.first.soldiers.first
     self_soldier = self.token.units.first.soldiers.first
-    power = 40
+    power = 30 #TODO Make this pull from equipment
     percentage = 100 - (target_soldier.effective_hardiness/100 - power)
     roll = rand(1..100)
     stunned = roll < percentage
@@ -125,7 +125,7 @@ end
   end
 
   def run
-    self.xloc += self.token.units.first.soldiers.first.speed/100 * direction
+    self.xloc += self.token.units.first.soldiers.first.effective_speed/100 * direction
     self.xloc = [self.xloc, 1000].min
     self.xloc = [self.xloc, 0].max
     #puts self.token.units.first.soldiers.first.last_name + " at " + self.xloc.to_s
@@ -155,7 +155,7 @@ end
   end
 
   def init
-    self.soldier.speed
+    self.soldier.effective_speed
   end
 
   def opponents_visible
