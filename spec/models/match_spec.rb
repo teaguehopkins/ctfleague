@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "Match" do
   let(:match) { Fabricate(:match) }
-  let(:soldier) {Fabricate(:soldier)}
+  let(:soldier) {FactoryGirl.create(:soldier)}
 
   it "should not promote with 0 xp" do
     soldier.set_starting_attributes
