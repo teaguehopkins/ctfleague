@@ -1,5 +1,7 @@
 == README
 
+{<img src="https://codeclimate.com/github/teaguehopkins/ctfleague/badges/gpa.svg" />}[https://codeclimate.com/github/teaguehopkins/ctfleague]
+
 === How to Start CTFLeague Locally
 
 Clone to a directory.
