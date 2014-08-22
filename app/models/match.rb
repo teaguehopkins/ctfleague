@@ -33,36 +33,16 @@ class Match < ActiveRecord::Base
   end
 
   def simulate
-    @league = self.league
-    @team_1 = self.users.first.teams.find_by_league_id(@league.id)
-    @team_2 = self.users.last.teams.find_by_league_id(@league.id)
-    @team_1.tokens.on_squad.each do |token|
-      self.match_tokens.create(:token => token, :side => 1, :xloc => 0, :direction => 1, :flag => false, :spotted => false)
-    end
+    @team_1 = self.users.first.teams.find_by_league_id(self.league.id)
+    @team_2 = self.users.last.teams.find_by_league_id(self.league.id)
 
-    @team_2.tokens.on_squad.each do |token|
-      self.match_tokens.create(:token => token, :side => 2, :xloc => 1000, :direction => -1, :flag => false, :spotted => false)
-    end
-
-      self.match_tokens.each do |match_token|
-        match_token.token.units.first.soldiers.first.update active: true
-      end
+    initialize_match_tokens(@team_1, 1)
+    initialize_match_tokens(@team_2, 2)
+    activate_all_match_tokens
 
     @flagwinner = nil
     until @flagwinner != nil do
-      self.log("======================================= New Round =======================================")
-      self.match_tokens.sort { |a, b| b.init <=> a.init }.each do |match_token| #order tokens by speed
-        vis = ""
-        vis = "_____Vis" if match_token.spotted
-        vis = vis + "_____Flag" if match_token.flag
-        if match_token.side == 1 && match_token.soldier.active
-          self.log(match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
-        end
-        if match_token.side == 2 && match_token.soldier.active
-          self.log("_____________________________________________" + match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
-        end
-      end
-    self.log("--------------------------------------- Actions ---------------------------------------")
+      output_turn_status_to_log
       sim_one_turn
     end
       @flagwinner.winner = true
@@ -70,6 +50,41 @@ class Match < ActiveRecord::Base
   end
 
   private
+
+  def activate_all_match_tokens
+    self.match_tokens.each do |match_token|
+      match_token.token.units.first.soldiers.first.update active: true
+    end
+  end
+
+  def initialize_match_tokens(team, side)
+    if side == 1
+      xloc = 0
+      direction = 1
+    else #side = 2
+      xloc = 1000
+      direction = -1
+    end
+    team.tokens.on_squad.each do |token|
+      self.match_tokens.create(:token => token, :side => side, :xloc => xloc, :direction => direction, :flag => false, :spotted => false)
+    end
+  end
+
+  def output_turn_status_to_log
+    self.log("======================================= New Round =======================================")
+    self.match_tokens.sort { |a, b| b.init <=> a.init }.each do |match_token| #order tokens by speed
+      vis = ""
+      vis = "_____Vis" if match_token.spotted
+      vis = vis + "_____Flag" if match_token.flag
+      if match_token.side == 1 && match_token.soldier.active
+        self.log(match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
+      end
+      if match_token.side == 2 && match_token.soldier.active
+        self.log("_____________________________________________" + match_token.soldier.last_name + " at " + match_token.xloc.to_s + " " + vis)
+      end
+    end
+    self.log("--------------------------------------- Actions ---------------------------------------")
+  end
 
   def sim_one_turn
     self.match_tokens.each do |match_token|
@@ -81,28 +96,31 @@ class Match < ActiveRecord::Base
           else
             match_token.run
             match_token.flag_grab
-            flag_winner(match_token)
+            check_if_token_captured_flag(match_token)
           end
         else
           match_token.run
           match_token.flag_grab
-          flag_winner(match_token)
+          check_if_token_captured_flag(match_token)
         end
       end
     end
   end
 
-  def flag_winner(match_token)
-    #check flag win conditions - does not handle ties - ties go to side 1
+  def check_if_token_captured_flag(match_token)
+    #TODO Fix ties. Currently does not handle ties - ties go to side 1
     if match_token.flag && match_token.xloc == 0 && match_token.side == 1
       self.log(match_token.soldier.last_name + " has captured the flag!")
-      @flagwinner = self.match_members.where(user_id: @team_1.user.id).first
-      self.log(@team_1.name + " wins!")
+      set_winning_team(@team_1)
     elsif match_token.flag && match_token.xloc == 1000 && match_token.side == 2
       self.log(match_token.soldier.last_name + " has captured the flag!")
-      self.log(@team_2.name + " wins!")
-      @flagwinner = self.match_members.where(user_id: @team_2.user.id).first
+      set_winning_team(@team_2)
     end
+  end
+
+  def set_winning_team(team)
+    @flagwinner = self.match_members.where(user_id: team.user.id).first
+    self.log(team.name + " wins!")
   end
 
   def award_points
@@ -121,28 +139,37 @@ class Match < ActiveRecord::Base
   end
 
   def develop_soldiers(side) #TODO Make this affected by injuries
+    #get soldiers as array
     side.map! do |match_token|
       match_token.token.units.first.soldiers.first
     end
 
-    side = side.sort_by do |soldier|
-      soldier.leadership
-    end
+    #sets the bonus before increasing stats, otherwise some soldies will get a bonus based on leadership increased this round.
+    bonus = leadership_bonus(side)
 
     side.each do |soldier|
-      bonus = 200 * ((side.last.leadership + 5000)/10000.00)
-      soldier.aim = soldier.aim + bonus
-      soldier.speed = soldier.speed + bonus
-      soldier.stealth = soldier.stealth + bonus
-      soldier.sight = soldier.sight + bonus
-      soldier.hardiness = soldier.hardiness + bonus
-      soldier.leadership = soldier.leadership + bonus
+      increase = 200 * bonus
+      soldier.aim = soldier.aim + increase
+      soldier.speed = soldier.speed + increase
+      soldier.stealth = soldier.stealth + increase
+      soldier.sight = soldier.sight + increase
+      soldier.hardiness = soldier.hardiness + increase
+      soldier.leadership = soldier.leadership + increase
       #XP +1 at the end of a match (future: where they weren't incapacitated)
       soldier.xp = soldier.xp + 1
       #rank +1 at certain XP thresholds
       promote_soldier(soldier)
       soldier.save
     end
+  end
+
+  def leadership_bonus(side)
+    #sort soldiers by leadership
+    side = side.sort_by do |soldier|
+      soldier.leadership
+    end
+    #return highest leadership
+    bonus = (side.last.leadership + 5000)/10000.00
   end
 
   def promote_soldier(soldier)
