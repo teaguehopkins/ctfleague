@@ -94,6 +94,46 @@ class Soldier < ActiveRecord::Base
     end
   end
 
+  def reset_match_stats
+    self.spots = 0
+    self.hits = 0
+    self.kills = 0
+    self.sneaks = 0
+    self.grabs = 0
+    self.captures = 0
+    self.save
+  end
+
+  def spot
+    self.spots += 1
+    self.save
+  end
+
+  def hit
+    self.hits += 1
+    self.save
+  end
+
+  def kill
+    self.kills += 1
+    self.save
+  end
+
+  def sneak
+    self.sneaks += 1
+    self.save
+  end
+
+  def grab
+    self.grabs += 1
+    self.save
+  end
+
+  def capture
+    self.captures += 1
+    self.save
+  end
+
   private
 
   def generate_stat
