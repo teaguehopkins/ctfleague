@@ -12,7 +12,7 @@ describe "Soldier" do
   it "should report correct hardiness" do
     soldier.set_starting_attributes
     soldier.damage = 2
-    soldier.effective_hardiness.should be(soldier.hardiness-2000)
+    soldier.effective_hardiness.should be([1,soldier.hardiness-2000].max)
   end
 
   it "should report correct average" do

@@ -9,7 +9,7 @@ before do
   MatchMailer.default_url_options = { :host => 'localhost' }
 end
 
-  scenario "completing a draft and playing a match" do
+  scenario "complete a full first season" do
     @user1 = Fabricate(:user, username: "testuser1")
     @user2 = Fabricate(:user, username: "testuser2")
     in_browser(:one) do
@@ -102,7 +102,7 @@ end
       end
       first(:link, 'Test League').click
       click_button 'Ready'
-      page.should have_content 'testuser1 vs. testuser2'
+      page.should have_content ('testuser1'&&'vs.'&&'testuser2')
       page.should have_content 'Flag Captures'
       page.should have_content 'Kills'
     end
@@ -110,7 +110,7 @@ end
 
       #Visit and save match stat view
       visit current_path + "/matches/" + @user1.memberships.first.league.matches.first.id.to_s + "/"
-      page.should have_content 'testuser1 vs. testuser2'
+      page.should have_content ('testuser1'&&'vs.'&&'testuser2')
       page.should have_content 'Flag Captures'
       page.should have_content 'Kills'
       click_link 'Test League'
