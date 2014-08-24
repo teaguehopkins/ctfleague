@@ -31,12 +31,14 @@ class MatchToken < ActiveRecord::Base
     if spotted
       if target.spotted == false
         self.match.log(self_soldier.last_name + " spotted " + target_soldier.last_name)
+        self.soldier.spot
       end
       target.spotted = true
       target.save
     end
     if spotted == false && self.distance_to(target) < 100 && target.spotted == false
       self.match.log(target.soldier.last_name + " (Stealth: "+ (target.soldier.effective_stealth/100).to_s + ")" + " snuck past " + self.soldier.last_name)
+      target.soldier.sneak
     end
     spotted
   end
@@ -104,6 +106,7 @@ end
       target_soldier.damage += 1
       self.match.log(target_soldier.last_name + " Damage: " + target_soldier.damage.to_s)
       target_soldier.save
+      self.soldier.hit
       self.stun(target)
     end
     hit
@@ -118,6 +121,7 @@ end
     stunned = roll < percentage
     if stunned
       self.match.log(self_soldier.last_name + " disabled " + target_soldier.last_name)
+      self_soldier.kill
       target_soldier.active = false
       target_soldier.save
     end
@@ -145,6 +149,7 @@ end
       if (self.side == 1 && self.xloc == 1000) || (self.side == 2 && self.xloc == 0)
         self.flag = true
         match.log(self.token.units.first.soldiers.first.last_name + " grabbed the flag!")
+        self.soldier.grab
         self.direction = self.direction * -1
       end
     end

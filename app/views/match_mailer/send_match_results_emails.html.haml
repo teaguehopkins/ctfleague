@@ -8,6 +8,35 @@
       Greetings, #{@user.username}! Here are the match results for your match against #{@opponent.username}'s team #{@opponent_team.name} in #{@league.name}.
     %p
       The winner was #{@winner.username}.
+    %h2= link_to "Stats", league_match_url(@league,@match)
+    %table
+      %thead
+        %th Team
+        %th Rank
+        %th Last Name
+        %th First Name
+        %th Spots
+        %th Hits
+        %th Kills
+        %th Sneaks
+        %th Flag Grabs
+        %th Flag Captures
+        %th.damage Injuries
+      %tbody
+      - @match.match_tokens.each do |match_token|
+        - soldier = match_token.token.units.first.soldiers.first
+        %tr
+          %td= match_token.side
+          %td= soldier.get_rank
+          %td= soldier.last_name
+          %td= soldier.first_name
+          %td= soldier.spots
+          %td= soldier.hits
+          %td= soldier.kills
+          %td= soldier.sneaks
+          %td= soldier.grabs
+          %td= soldier.captures
+          %td= soldier.damage
     %h2 Detailed Results
     - @log.each do |event|
       %p= event

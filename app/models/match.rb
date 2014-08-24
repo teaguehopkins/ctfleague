@@ -67,6 +67,7 @@ class Match < ActiveRecord::Base
     end
     team.tokens.on_squad.each do |token|
       self.match_tokens.create(:token => token, :side => side, :xloc => xloc, :direction => direction, :flag => false, :spotted => false)
+      token.units.first.soldiers.first.reset_match_stats
     end
   end
 
@@ -111,9 +112,11 @@ class Match < ActiveRecord::Base
     #TODO Fix ties. Currently does not handle ties - ties go to side 1
     if match_token.flag && match_token.xloc == 0 && match_token.side == 1
       self.log(match_token.soldier.last_name + " has captured the flag!")
+      match_token.soldier.capture
       set_winning_team(@team_1)
     elsif match_token.flag && match_token.xloc == 1000 && match_token.side == 2
       self.log(match_token.soldier.last_name + " has captured the flag!")
+      match_token.soldier.capture
       set_winning_team(@team_2)
     end
   end

@@ -1,4 +1,11 @@
 class MatchesController < ApplicationController
+  def show
+    @league = League.find(params[:league_id])
+    @match = Match.find(params[:id])
+    @winner = @match.match_members.where(winner: true).first.user
+    @log = @match.get_log
+  end
+
   def ready
     @match = Match.find(params[:id])
     @league = League.find(params[:league_id])
@@ -22,7 +29,7 @@ class MatchesController < ApplicationController
   def finish
     @match.finish
     @league.check_for_end_of_round
-    redirect_to league_path(@league), notice: "The match has been finished."
+    redirect_to league_match_path(@league, @match), notice: "The match has been finished."
   end
 
   private
