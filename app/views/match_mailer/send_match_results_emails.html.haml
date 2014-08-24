@@ -8,7 +8,7 @@
       Greetings, #{@user.username}! Here are the match results for your match against #{@opponent.username}'s team #{@opponent_team.name} in #{@league.name}.
     %p
       The winner was #{@winner.username}.
-    %h2 Stats
+    %h2= link_to "Stats", league_match_url(@league,@match)
     %table
       %thead
         %th Team
