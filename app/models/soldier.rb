@@ -88,9 +88,9 @@ class Soldier < ActiveRecord::Base
     if @chance > rand
       self.retired = true
       self.save
-
-      self.unit.token.on_squad = false
-      self.unit.token.save
+      return true
+    else 
+      return false 
     end
   end
 
