@@ -97,7 +97,10 @@ class League < ActiveRecord::Base
       team.tokens.each do |token|
         soldier = token.units.first.soldiers.first
         soldier.age_up
-        soldier.check_for_retirement
+        if (soldier.check_for_retirement)
+          token.on_squad = false
+          token.save
+        end
       end
     end
   end
